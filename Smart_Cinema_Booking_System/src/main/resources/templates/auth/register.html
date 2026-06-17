@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+</head>
+
+<body class="cinema-bg flex justify-center items-center px-4">
+
+<div class="auth-card w-full max-w-lg rounded-2xl shadow-2xl p-8">
+
+    <div class="text-center mb-8">
+        <h1 class="brand-title text-4xl font-bold">
+            ABC CINEMA
+        </h1>
+
+        <p class="text-slate-400 mt-2">
+            Tạo tài khoản mới
+        </p>
+    </div>
+
+    <div th:if="${errorMessage}"
+         class="alert-error mb-4"
+         th:text="${errorMessage}">
+    </div>
+
+    <form th:action="@{/register}" th:object="${registerRequest}" method="post" class="space-y-4">
+        <div>
+            <label class="text-slate-300 block mb-1">
+                Username
+            </label>
+
+            <input type="text" th:field="*{username}" class="form-input">
+
+            <p th:if="${#fields.hasErrors('username')}"
+               th:errors="*{username}"
+               class="error-text">
+            </p>
+        </div>
+
+        <div>
+            <label class="text-slate-300 block mb-1">
+                Password
+            </label>
+
+            <input type="password"
+                   th:field="*{password}"
+                   class="form-input">
+
+            <p th:if="${#fields.hasErrors('password')}"
+               th:errors="*{password}"
+               class="error-text">
+            </p>
+        </div>
+
+        <div>
+            <label class="text-slate-300 block mb-1">
+                Email
+            </label>
+
+            <input type="text"
+                   th:field="*{email}"
+                   class="form-input">
+
+            <p th:if="${#fields.hasErrors('email')}"
+               th:errors="*{email}"
+               class="error-text">
+            </p>
+        </div>
+
+        <div>
+            <label class="text-slate-300 block mb-1">
+                Full Name
+            </label>
+
+            <input type="text"
+                   th:field="*{fullName}"
+                   class="form-input">
+
+            <p th:if="${#fields.hasErrors('fullName')}"
+               th:errors="*{fullName}"
+               class="error-text">
+            </p>
+        </div>
+
+        <div>
+            <label class="text-slate-300 block mb-1">
+                Phone
+            </label>
+
+            <input type="text"
+                   th:field="*{phone}"
+                   class="form-input">
+
+            <p th:if="${#fields.hasErrors('phone')}"
+               th:errors="*{phone}"
+               class="error-text">
+            </p>
+        </div>
+
+        <div>
+            <label class="text-slate-300 block mb-1">
+                Address
+            </label>
+
+            <textarea rows="3" th:field="*{address}" class="form-input"></textarea>
+
+            <p th:if="${#fields.hasErrors('address')}"
+               th:errors="*{address}"
+               class="error-text">
+            </p>
+        </div>
+
+        <button type="submit" class="primary-btn">
+            Đăng ký
+        </button>
+
+    </form>
+
+    <div class="text-center mt-6">
+        <span class="text-slate-400">
+            Bạn đã có tài khoản?
+        </span>
+
+        <a th:href="@{/login}"
+           class="text-yellow-400 hover:text-yellow-300 font-semibold">
+            Đăng nhập
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

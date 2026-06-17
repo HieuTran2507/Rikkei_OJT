@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="cinema-bg flex justify-center items-center px-4">
+
+<div class="auth-card w-full max-w-md rounded-2xl shadow-2xl p-8">
+
+    <div class="text-center mb-8">
+
+        <h1 class="brand-title text-4xl font-bold">
+            ABC CINEMA
+        </h1>
+
+        <p class="text-slate-400 mt-2">
+            Đăng nhập tài khoản
+        </p>
+
+    </div>
+
+    <div th:if="${param.error}" class="alert-error mb-4">
+        Username hoặc Password không đúng
+    </div>
+
+    <div th:if="${param.logout}" class="alert-success mb-4">
+        Đăng xuất thành công
+    </div>
+
+    <form th:action="@{/login}" method="post" class="space-y-5">
+        <div>
+            <label class="text-slate-300 block mb-1">
+                Username
+            </label>
+
+            <input type="text" name="username" class="form-input">
+        </div>
+
+        <div>
+            <label class="text-slate-300 block mb-1">
+                Password
+            </label>
+
+            <input type="password" name="password" class="form-input">
+        </div>
+
+        <button type="submit" class="primary-btn">
+            Đăng nhập
+        </button>
+
+    </form>
+
+    <div class="text-center mt-6">
+
+        <span class="text-slate-400">
+            Chưa có tài khoản?
+        </span>
+
+        <a th:href="@{/register}" class="text-yellow-400 hover:text-yellow-300 font-semibold">
+            Đăng ký
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

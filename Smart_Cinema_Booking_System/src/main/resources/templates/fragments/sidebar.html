@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+
+<div th:fragment="sidebar"
+     class="w-64 bg-slate-800 text-white p-4">
+
+  <ul class="space-y-3">
+
+    <li>
+      <a th:href="@{/dashboard}">
+        Dashboard
+      </a>
+    </li>
+
+    <li>
+      <a th:href="@{/profile}">
+        Profile
+      </a>
+    </li>
+
+    <!-- USER -->
+
+    <li sec:authorize="hasRole('USER')">
+
+      <a th:href="@{/movies}">
+        Book Ticket
+      </a>
+
+    </li>
+
+    <li sec:authorize="hasRole('USER')">
+
+      <a th:href="@{/history}">
+        Booking History
+      </a>
+
+    </li>
+
+    <!-- STAFF -->
+
+    <li sec:authorize="hasRole('STAFF')">
+
+      <a th:href="@{/staff/tickets}">
+        Ticket Lookup
+      </a>
+
+    </li>
+
+    <!-- ADMIN -->
+
+    <li sec:authorize="hasRole('ADMIN')">
+
+      <a th:href="@{/admin/movies}">
+        Movie Management
+      </a>
+
+    </li>
+
+    <li sec:authorize="hasRole('ADMIN')">
+
+      <a th:href="@{/admin/showtimes}">
+        Showtime Management
+      </a>
+
+    </li>
+
+    <li sec:authorize="hasRole('ADMIN')">
+
+      <a th:href="@{/admin/reports}">
+        Reports
+      </a>
+
+    </li>
+
+  </ul>
+
+</div>
+
+</body>
+</html>
