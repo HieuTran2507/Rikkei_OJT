@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div class="max-w-5xl mx-auto">
+  <div class="mb-6">
+    <h2 class="text-3xl font-bold text-slate-800">
+      Thông tin cá nhân
+    </h2>
+
+    <p class="text-slate-500 mt-2">
+      Quản lý thông tin tài khoản của bạn
+    </p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+    <div class="bg-gradient-to-r from-sky-600 to-cyan-500 p-6">
+      <h3 class="text-2xl font-bold text-white">
+        Hồ sơ người dùng
+      </h3>
+    </div>
+
+    <div class="p-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="info-item">
+          <label class="info-label">
+            Username
+          </label>
+
+          <p class="info-value"
+             th:text="${user.username}">
+          </p>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">
+            Email
+          </label>
+
+          <p class="info-value"
+             th:text="${user.email}">
+          </p>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">
+            Full Name
+          </label>
+          <p class="info-value"
+             th:text="${user.fullName}">
+          </p>
+        </div>
+
+        <div class="info-item">
+          <label class="info-label">
+            Phone
+          </label>
+
+          <p class="info-value"
+             th:text="${user.phone}">
+          </p>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="info-label">
+            Address
+          </label>
+
+          <p class="info-value"
+             th:text="${user.address}">
+          </p>
+        </div>
+
+        <div class="md:col-span-2" sec:authorize="hasAnyRole('ADMIN','STAFF')">
+          <label class="info-label">
+            Role
+          </label>
+
+          <p class="info-value"
+             th:text="${user.role}">
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-4 mt-8">
+        <button onclick="openProfileModal()"
+                class="profile-btn-primary">
+          ✏️ Chỉnh sửa thông tin
+        </button>
+
+        <button onclick="openCredentialModal()"
+                class="profile-btn-secondary">
+          🔒 Sửa đăng nhập
+        </button>
+      </div>
+    </div>
+  </div>
+  <div th:replace="~{profile/profile-modal :: profileModal}"></div>
+</div>
+</body>
+</html>

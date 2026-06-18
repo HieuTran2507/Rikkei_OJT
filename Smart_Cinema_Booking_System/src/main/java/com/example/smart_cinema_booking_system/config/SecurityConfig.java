@@ -25,8 +25,8 @@ public class SecurityConfig {
     ) throws Exception {
 
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers(
                                 "/",
                                 "/register",
@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/staff/**")
                         .hasAnyRole("STAFF", "ADMIN")
                         // USER ROLE
-                        .requestMatchers("/booking/**")
+                        .requestMatchers("/user/**")
                         .hasRole("USER")
 
                         .anyRequest()

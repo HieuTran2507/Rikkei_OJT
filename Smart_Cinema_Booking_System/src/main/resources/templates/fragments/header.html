@@ -4,30 +4,27 @@
 
 <body>
 
-<header th:fragment="header"
-        class="bg-slate-900 text-white h-16 flex items-center justify-between px-6">
+<header th:fragment="header" class="dashboard-header">
+    <h1 class="brand-title">
+        ABC CINEMA
+    </h1>
 
-  <h1 class="text-2xl font-bold text-yellow-400">
-    ABC CINEMA
-  </h1>
+    <div class="flex items-center gap-4">
+            <p class="text-sm text-slate-300">
+                Welcome,
+            </p>
 
-  <div class="flex items-center gap-4">
+            <p class="font-semibold text-white"
+               th:text="${fullName}">
+            </p>
 
-        <span sec:authorize="isAuthenticated()">
-            Welcome,
-            <span sec:authentication="name"></span>
-        </span>
 
-    <form th:action="@{/logout}"
-          method="post">
-
-      <button class="bg-red-500 px-3 py-1 rounded">
-        Logout
-      </button>
-
-    </form>
-
-  </div>
+        <form th:action="@{/logout}" method="post">
+            <button class="logout-btn">
+                Đăng xuất
+            </button>
+        </form>
+    </div>
 
 </header>
 

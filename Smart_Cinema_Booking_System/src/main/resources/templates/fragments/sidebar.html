@@ -1,79 +1,69 @@
 <!DOCTYPE html>
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
 
-<div th:fragment="sidebar"
-     class="w-64 bg-slate-800 text-white p-4">
+<div th:fragment="sidebar" class="sidebar">
 
-  <ul class="space-y-3">
+  <h2 class="sidebar-title">
+    MENU
+  </h2>
+
+  <ul class="sidebar-menu">
 
     <li>
-      <a th:href="@{/dashboard}">
-        Dashboard
+      <a th:href="@{/dashboard}"
+         class="sidebar-link">
+        Trang chủ
       </a>
     </li>
 
     <li>
-      <a th:href="@{/profile}">
-        Profile
+      <a href="#"
+         onclick="loadContent('/profile/content')"
+         class="sidebar-link">
+        Thông tin cá nhân
       </a>
     </li>
 
     <!-- USER -->
-
     <li sec:authorize="hasRole('USER')">
-
-      <a th:href="@{/movies}">
-        Book Ticket
+      <a th:href="@{user/booking}" class="sidebar-link">
+        Đặt vé
       </a>
-
     </li>
 
     <li sec:authorize="hasRole('USER')">
-
-      <a th:href="@{/history}">
-        Booking History
+      <a th:href="@{user/history}" class="sidebar-link">
+        Lịch sử đặt vé
       </a>
-
     </li>
 
     <!-- STAFF -->
-
     <li sec:authorize="hasRole('STAFF')">
-
-      <a th:href="@{/staff/tickets}">
-        Ticket Lookup
+      <a th:href="@{/staff/tickets}" class="sidebar-link">
+        Kiểm tra vé
       </a>
-
     </li>
 
     <!-- ADMIN -->
-
     <li sec:authorize="hasRole('ADMIN')">
-
-      <a th:href="@{/admin/movies}">
-        Movie Management
+      <a th:href="@{/admin/movies}" class="sidebar-link">
+        Quản lý phim
       </a>
-
     </li>
 
     <li sec:authorize="hasRole('ADMIN')">
-
-      <a th:href="@{/admin/showtimes}">
-        Showtime Management
+      <a th:href="@{/admin/showtimes}" class="sidebar-link">
+        Quản lý xuất chiếu
       </a>
-
     </li>
 
     <li sec:authorize="hasRole('ADMIN')">
-
-      <a th:href="@{/admin/reports}">
-        Reports
+      <a th:href="@{/admin/reports}" class="sidebar-link">
+        Báo cáo
       </a>
-
     </li>
 
   </ul>
