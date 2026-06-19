@@ -1,8 +1,10 @@
 package com.example.smart_cinema_booking_system.service;
 
+import com.example.smart_cinema_booking_system.exception.FieldException;
 import com.example.smart_cinema_booking_system.exception.UserAlreadyExistsException;
 import com.example.smart_cinema_booking_system.model.ENUM.UserRole;
 import com.example.smart_cinema_booking_system.model.dto.RegisterRequest;
+import com.example.smart_cinema_booking_system.model.dto.UpdateCredentialRequest;
 import com.example.smart_cinema_booking_system.model.dto.UpdateProfileRequest;
 import com.example.smart_cinema_booking_system.model.entity.User;
 import com.example.smart_cinema_booking_system.repository.UserRepository;
@@ -75,7 +77,6 @@ public class UserService {
         return userDetails.getUser();
     }
 
-
     @Transactional
     public void updateProfile(UpdateProfileRequest request) {
 
@@ -95,6 +96,40 @@ public class UserService {
         user.setPhone(request.getPhone());
 
         user.setAddress(request.getAddress());
+
+        user.setUpdatedAt(LocalDateTime.now());
+
+        ur.save(user);
+    }
+
+    @Transactional
+    public void updateCredential(UpdateCredentialRequest request){
+        User user = getCurrentUser();
+        if(!user.getUsername().equals(request.getCurrentUsername())){
+            throw new FieldException(
+                    "currentUsername",
+                    "Username không đúng"
+            );
+        }
+
+        if(!pe.matches(request.getCurrentPassword(), user.getPassword())){
+            throw new FieldException(
+                    "currentPassword",
+                    "Password không đúng"
+            );
+        }
+
+        if(ur.existsByUsername(request.getNewUsername()) &&
+                !request.getNewUsername().equals(user.getUsername())){
+            throw new FieldException(
+                    "newUsername",
+                    "Username đã tồn tại"
+            );
+        }
+
+        user.setUsername(request.getNewUsername());
+
+        user.setPassword(pe.encode(request.getNewPassword()));
 
         user.setUpdatedAt(LocalDateTime.now());
 
