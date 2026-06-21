@@ -1,4 +1,5 @@
 function loadContent(url) {
+    console.log(url);
     fetch(url)
         .then(response => response.text())
         .then(html => {
@@ -171,3 +172,91 @@ function updateCredential(){
 //        alert(error.message);
     });
 }
+
+// Thêm phim
+function openCreateMovieModal() {
+    document.getElementById("createMovieModal")
+        .classList.remove("hidden");
+}
+
+function closeCreateMovieModal() {
+    document.getElementById("createMovieModal")
+        .classList.add("hidden");
+
+    document.getElementById("createMovieForm").reset();
+    clearMovieErrors();
+}
+
+function clearMovieErrors() {
+    document.querySelectorAll(".error-text")
+        .forEach(e => e.innerText = "");
+}
+
+function showMovieErrors(errors) {
+
+    clearMovieErrors();
+
+    if (errors.title)
+        document.getElementById("titleError").innerText = errors.title;
+
+    if (errors.description)
+        document.getElementById("descriptionError").innerText = errors.description;
+
+    if (errors.duration)
+        document.getElementById("durationError").innerText = errors.duration;
+
+    if (errors.releaseDate)
+        document.getElementById("releaseDateError").innerText = errors.releaseDate;
+
+    if (errors.genreIds)
+        document.getElementById("genreError").innerText = errors.genreIds;
+
+    if (errors.poster)
+        document.getElementById("posterError").innerText = errors.poster;
+}
+
+function createMovie() {
+
+    const formData = new FormData();
+
+    formData.append("title", document.getElementById("title").value);
+    formData.append("description", document.getElementById("description").value);
+    formData.append("duration", document.getElementById("duration").value);
+    formData.append("releaseDate", document.getElementById("releaseDate").value);
+    formData.append("language", document.getElementById("language").value);
+    formData.append("status", document.getElementById("status").value);
+
+    // poster
+    const poster = document.getElementById("poster").files[0];
+    if (poster) {
+        formData.append("poster", poster);
+    }
+
+    // genres
+    document.querySelectorAll("input[name='genreIds']:checked")
+        .forEach(cb => formData.append("genreIds", cb.value));
+
+    fetch("/admin/movies/create", {
+        method: "POST",
+        body: formData
+    })
+    .then(async res => {
+        if (!res.ok) {
+            const errors = await res.json();
+            showMovieErrors(errors);
+            throw new Error("Validation error");
+        }
+        return res.text();
+    })
+    .then(() => {
+        closeCreateMovieModal();
+        // reload list giống profile
+        loadContent("/admin/movies/content");
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}
+
+
+

@@ -1,35 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<body>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <div th:fragment="profileModal">
-    <div id="profileModal" class="modal-overlay hidden">
-        <div class="modal-box">
-            <div class="modal-header">
+    <div id="profileModal" class="profile-modal-overlay hidden">
+        <div class="profile-modal-box">
+            <div class="profile-modal-header">
                 <h3>Chỉnh sửa thông tin</h3>
                 <button onclick="closeProfileModal()">✕</button>
             </div>
 
-            <form id="profileForm">
-                <div class="form-group">
+            <form id="profileForm" class="profile-form">
+                <div class="profile-form-group">
                     <label>Email</label>
                     <input id="editEmail" type="text" th:value="${user.email}">
                     <p id="emailError" class="error-text"></p>
                 </div>
 
-                <div class="form-group">
+                <div class="profile-form-group">
                     <label>Họ tên</label>
                     <input id="editFullName" type="text" th:value="${user.fullName}">
                     <p id="fullNameError" class="error-text"></p>
                 </div>
 
-                <div class="form-group">
+                <div class="profile-form-group">
                     <label>Số điện thoại</label>
                     <input id="editPhone" type="text" th:value="${user.phone}">
                     <p id="phoneError" class="error-text"></p>
                 </div>
 
-                <div class="form-group">
+                <div class="profile-form-group">
                     <label>Địa chỉ</label>
                     <textarea id="editAddress" rows="3" th:text="${user.address}"></textarea>
                     <p id="addressError" class="error-text"></p>
@@ -44,13 +43,8 @@
                         Hủy
                     </button>
                 </div>
-
             </form>
-
         </div>
-
     </div>
-
 </div>
-</body>
 </html>

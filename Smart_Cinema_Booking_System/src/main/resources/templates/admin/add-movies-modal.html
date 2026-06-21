@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="createMovieModal">
+    <!-- CREATE MOVIE MODAL -->
+    <div id="createMovieModal" class="movie-modal-overlay hidden">
+        <div class="movie-modal-box">
+            <div class="movie-modal-header">
+                <h3>Thêm phim mới</h3>
+                <button onclick="closeCreateMovieModal()">✕</button>
+            </div>
+
+            <form id="createMovieForm" class="movie-form">
+                <!-- TITLE -->
+                <div class="movie-form-group">
+                    <label>Tên phim</label>
+                    <input id="title" type="text">
+                    <p id="titleError" class="error-text"></p>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="movie-form-group">
+                    <label>Mô tả</label>
+                    <textarea id="description"></textarea>
+                    <p id="descriptionError" class="error-text"></p>
+                </div>
+
+                <!-- DURATION -->
+                <div class="movie-form-group">
+                    <label>Thời lượng (phút)</label>
+                    <input id="duration" type="number">
+                    <p id="durationError" class="error-text"></p>
+                </div>
+
+                <!-- RELEASE DATE -->
+                <div class="movie-form-group">
+                    <label>Ngày phát hành</label>
+                    <input id="releaseDate" type="date">
+                    <p id="releaseDateError" class="error-text"></p>
+                </div>
+
+                <!-- LANGUAGE -->
+                <div class="movie-form-group">
+                    <label>Ngôn ngữ</label>
+                    <input id="language" type="text">
+                </div>
+
+                <!-- STATUS -->
+                <div class="movie-form-group">
+                    <label>Trạng thái</label>
+                    <select id="status">
+                        <option value="NOW_SHOWING">NOW_SHOWING</option>
+                        <option value="COMING_SOON">COMING_SOON</option>
+                        <option value="STOPPED">STOPPED</option>
+                    </select>
+                </div>
+
+                <!-- GENRES -->
+                <div class="movie-form-group">
+                    <label>Thể loại</label>
+
+                    <div th:each="g : ${genres}">
+                        <input type="checkbox"
+                               name="genreIds"
+                               th:value="${g.genreId}">
+                        <span th:text="${g.genreName}"></span>
+                    </div>
+
+                    <p id="genreError" class="error-text"></p>
+                </div>
+
+                <!-- POSTER -->
+                <div class="movie-form-group">
+                    <label>Poster</label>
+                    <input id="poster" type="file">
+                    <p id="posterError" class="error-text"></p>
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="movie-form-actions">
+                    <button type="button"
+                            onclick="createMovie()"
+                            class="profile-btn-primary">
+                        Lưu
+                    </button>
+
+                    <button type="button"
+                            onclick="closeCreateMovieModal()"
+                            class="profile-btn-secondary">
+                        Hủy
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+</html>

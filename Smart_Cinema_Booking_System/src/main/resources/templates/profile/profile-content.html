@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<body>
+
 <div class="max-w-5xl mx-auto">
   <div class="mb-6">
     <h2 class="text-3xl font-bold text-slate-800">
@@ -22,61 +22,61 @@
 
     <div class="p-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="info-item">
-          <label class="info-label">
+        <div class="profile-info-item">
+          <label class="profile-info-label">
             Username
           </label>
 
-          <p class="info-value"
+          <p class="profile-info-value"
              th:text="${user.username}">
           </p>
         </div>
 
-        <div class="info-item">
-          <label class="info-label">
+        <div class="profile-info-item">
+          <label class="profile-info-label">
             Email
           </label>
 
-          <p class="info-value"
+          <p class="profile-info-value"
              th:text="${user.email}">
           </p>
         </div>
 
-        <div class="info-item">
-          <label class="info-label">
+        <div class="profile-info-item">
+          <label class="profile-info-label">
             Full Name
           </label>
-          <p class="info-value"
+          <p class="profile-info-value"
              th:text="${user.fullName}">
           </p>
         </div>
 
-        <div class="info-item">
-          <label class="info-label">
+        <div class="profile-info-item">
+          <label class="profile-info-label">
             Phone
           </label>
 
-          <p class="info-value"
+          <p class="profile-info-value"
              th:text="${user.phone}">
           </p>
         </div>
 
         <div class="md:col-span-2">
-          <label class="info-label">
+          <label class="profile-info-label">
             Address
           </label>
 
-          <p class="info-value"
+          <p class="profile-info-value"
              th:text="${user.address}">
           </p>
         </div>
 
         <div class="md:col-span-2" sec:authorize="hasAnyRole('ADMIN','STAFF')">
-          <label class="info-label">
+          <label class="profile-info-label">
             Role
           </label>
 
-          <p class="info-value"
+          <p class="profile-info-value"
              th:text="${user.role}">
           </p>
         </div>
@@ -98,5 +98,4 @@
   <div th:replace="~{profile/profile-modal :: profileModal}"></div>
   <div th:replace="~{profile/credential-modal :: credentialModal}"></div>
 </div>
-</body>
 </html>

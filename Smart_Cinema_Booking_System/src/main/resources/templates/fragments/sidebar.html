@@ -2,8 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<body>
-
 <div th:fragment="sidebar" class="sidebar">
 
   <h2 class="sidebar-title">
@@ -49,7 +47,9 @@
 
     <!-- ADMIN -->
     <li sec:authorize="hasRole('ADMIN')">
-      <a th:href="@{/admin/movies}" class="sidebar-link">
+      <a href="#"
+         onclick="loadContent('/admin/movies/content')"
+         class="sidebar-link">
         Quản lý phim
       </a>
     </li>
@@ -69,6 +69,4 @@
   </ul>
 
 </div>
-
-</body>
 </html>

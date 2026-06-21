@@ -1,0 +1,120 @@
+/* ===== PROFILE ===== */
+.profile-info-item{
+    display:flex;
+    flex-direction:column;
+}
+
+.profile-info-label{
+    font-size:13px;
+    font-weight:600;
+    color:#64748b;
+    margin-bottom:6px;
+}
+
+.profile-info-value{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+    padding:12px 14px;
+    color:#1e293b;
+    font-weight:500;
+    min-height:48px;
+    display:flex;
+    align-items:center;
+}
+
+.profile-btn-primary{
+    background:#0891b2;
+    color:white;
+    padding:12px 24px;
+    border-radius:12px;
+    font-weight:600;
+    transition:all 0.3s;
+}
+
+.profile-btn-primary:hover{
+    background:#0e7490;
+    transform:translateY(-2px);
+}
+
+.profile-btn-secondary{
+    background:#facc15;
+    color:#1e293b;
+    padding:12px 24px;
+    border-radius:12px;
+    font-weight:600;
+    transition:all 0.3s;
+}
+
+.profile-btn-secondary:hover{
+    background:#eab308;
+    transform:translateY(-2px);
+}
+
+/* ===== MODAL ===== */
+.profile-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.profile-form {
+    padding: 20px;
+    flex: 1;
+}
+
+.profile-modal-box {
+    background: white;
+    width: 600px;
+    max-width: 90%;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.profile-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #1e293b;
+    color: white;
+}
+
+.profile-modal-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile-modal-header button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.profile-form-group {
+    margin-bottom: 16px;
+}
+
+.profile-form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #475569;
+}
+
+.profile-form-group input,
+.profile-form-group textarea {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 10px 14px;
+}
