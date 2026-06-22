@@ -15,6 +15,17 @@ public class FileUploadService {
 
     private static final String DEFAULT_POSTER = "/posters/default.png";
 
+    // kiểm tra extension
+    private String getExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1)
+                .toLowerCase();
+    }
+    private boolean isValidImage(String extension) {
+        return extension.equals("jpg")
+                || extension.equals("jpeg")
+                || extension.equals("png");
+    }
+    // upload ảnh
     public String uploadPoster(MultipartFile file) {
 
         // 1. Nếu không chọn file → dùng default
@@ -61,15 +72,28 @@ public class FileUploadService {
             );
         }
     }
+    // xóa ảnh
+    public void deletePoster(String posterUrl) {
 
-    private String getExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1)
-                .toLowerCase();
+        if (posterUrl == null || posterUrl.equals(DEFAULT_POSTER)) {
+            return;
+        }
+
+        try {
+
+            String fileName = posterUrl.replace("/posters/", "");
+
+            Path path = Paths.get(UPLOAD_DIR, fileName);
+
+            Files.deleteIfExists(path);
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Không thể xóa poster"
+            );
+        }
     }
 
-    private boolean isValidImage(String extension) {
-        return extension.equals("jpg")
-                || extension.equals("jpeg")
-                || extension.equals("png");
-    }
+
 }

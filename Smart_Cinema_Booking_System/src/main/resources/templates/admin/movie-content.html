@@ -3,11 +3,19 @@
 <div class="bg-white rounded-xl shadow p-6">
     <!-- SEARCH + ADD -->
     <div class="flex justify-between mb-4">
-        <input type="text"
-               id="search"
-               placeholder="Search..."
-               onkeyup="searchMovies(this.value)"
-               class="border px-3 py-2 rounded w-1/3">
+        <div class="flex gap-2">
+            <input type="text"
+                   id="search"
+                   th:value="${keyword}"
+                   placeholder="Search..."
+                   class="border px-3 py-2 rounded w-80">
+
+            <button onclick="searchMovies()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                Search
+            </button>
+        </div>
+
 
         <button onclick="openCreateMovieModal()"
                 class="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">
@@ -85,7 +93,7 @@
             <!-- Prev -->
             <button class="pagination-btn"
                     th:if="${movies.hasPrevious()}"
-                    th:onclick="'loadContent(\'/admin/movies/content?page=' + ${movies.number - 1} + '\')'">
+                    th:onclick="'goToPage(' + ${movies.number - 1} + ')'">
                 Prev
             </button>
 
@@ -94,15 +102,16 @@
                     th:each="i : ${#numbers.sequence(0, movies.totalPages - 1)}"
                     th:text="${i + 1}"
                     th:classappend="${i == movies.number} ? 'active-page' : ''"
-                    th:onclick="'loadContent(\'/admin/movies/content?page=' + ${i} + '\')'">
+                    th:onclick="'goToPage(' + ${i} + ')'">
             </button>
 
             <!-- Next -->
             <button class="pagination-btn"
                     th:if="${movies.hasNext()}"
-                    th:onclick="'loadContent(\'/admin/movies/content?page=' + ${movies.number + 1} + '\')'">
+                    th:onclick="'goToPage(' + ${movies.number + 1} + ')'">
                 Next
             </button>
+
         </div>
 
     </div>

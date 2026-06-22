@@ -22,14 +22,6 @@ public class Showtime {
     @Column(name = "showtime_id")
     private Long showtimeId;
 
-    @ManyToOne
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
-
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
-
     @Column(name = "start_time")
     private LocalDateTime startTime;
 
@@ -41,6 +33,14 @@ public class Showtime {
 
     @Enumerated(EnumType.STRING)
     private ShowtimeStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
 
     @OneToMany(mappedBy = "showtime")
     private List<Booking> bookings;

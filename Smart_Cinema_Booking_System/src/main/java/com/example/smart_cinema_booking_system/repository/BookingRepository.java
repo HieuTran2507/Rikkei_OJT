@@ -6,10 +6,5 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("""
-        SELECT COUNT(b)
-        FROM Booking b
-        WHERE b.showtime.movie.movieId = :movieId
-    """)
-    long countByMovieId(Long movieId);
+    long countByShowtimeMovieMovieId(Long movieId);
 }

@@ -21,14 +21,6 @@ public class Booking {
     @Column(name = "booking_id")
     private Long bookingId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "showtime_id")
-    private Showtime showtime;
-
     @Column(name = "booking_date")
     private LocalDateTime bookingDate;
 
@@ -44,4 +36,12 @@ public class Booking {
 
     @Column(name = "booking_seat", columnDefinition = "TEXT")
     private String bookingSeat;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "showtime_id")
+    private Showtime showtime;
 }

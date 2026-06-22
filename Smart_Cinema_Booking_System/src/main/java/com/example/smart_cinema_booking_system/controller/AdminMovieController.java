@@ -100,7 +100,25 @@ public class AdminMovieController {
     @PostMapping("/delete/{id}")
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        movieService.delete(id);
-        return ResponseEntity.ok("deleted");
+        try {
+
+            movieService.delete(id);
+            return ResponseEntity.ok("deleted");
+
+        } catch (RuntimeException ex) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(ex.getMessage());
+        }
+    }
+
+    // EDIT
+    @GetMapping("/{id}")
+    @ResponseBody
+    public Movie getMovie(
+            @PathVariable Long id
+    ){
+        return movieService.findById(id);
     }
 }

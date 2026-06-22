@@ -11,6 +11,7 @@
             </div>
 
             <form id="createMovieForm" class="movie-form">
+                <input type="hidden" id="movieId">
                 <!-- TITLE -->
                 <div class="movie-form-group">
                     <label>Tên phim</label>
@@ -72,14 +73,20 @@
                 <!-- POSTER -->
                 <div class="movie-form-group">
                     <label>Poster</label>
-                    <input id="poster" type="file">
+                    <img id="posterPreview"
+                         src="/posters/default.png"
+                         width="120">
+                    <input id="poster"
+                           type="file"
+                           accept=".jpg,.jpeg,.png"
+                           onchange="previewPoster(this)">
                     <p id="posterError" class="error-text"></p>
                 </div>
 
                 <!-- BUTTONS -->
                 <div class="movie-form-actions">
                     <button type="button"
-                            onclick="createMovie()"
+                            onclick="saveMovie()"
                             class="profile-btn-primary">
                         Lưu
                     </button>

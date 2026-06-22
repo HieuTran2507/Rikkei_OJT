@@ -13,14 +13,11 @@ function loadHeader(){
         .then(response => response.text())
         .then(html => {document.getElementById("header-container").innerHTML = html;});
 }
-
 function clearErrors(){
     document
         .querySelectorAll(".error-text")
         .forEach(e => {e.innerText = "";});
 }
-
-
 function showProfileErrors(errors){
     clearErrors();
     if(errors.email){
@@ -47,7 +44,6 @@ function showProfileErrors(errors){
             .innerText = errors.address;
     }
 }
-
 function showCredentialErrors(errors){
     clearErrors();
     if(errors.currentUsername){
@@ -72,6 +68,17 @@ function showCredentialErrors(errors){
             .innerText =errors.newPassword;
     }
 }
+function goToPage(page){
+
+    const keyword = document.getElementById("search").value;
+
+    loadContent(
+        "/admin/movies/content?page="
+        + page
+        + "&keyword="
+        + encodeURIComponent(keyword)
+    );
+}
 
 // chỉnh sửa thông tin cá nhân
 function openProfileModal(){
@@ -80,7 +87,6 @@ function openProfileModal(){
         .classList
         .remove("hidden");
 }
-
 function closeProfileModal(){
     document
         .getElementById("profileModal")
@@ -93,7 +99,6 @@ function closeProfileModal(){
 
     clearErrors();
 }
-
 function updateProfile(){
     const data = {
         email: document.getElementById("editEmail").value,
@@ -129,7 +134,6 @@ function openCredentialModal(){
         .classList
         .remove("hidden");
 }
-
 function closeCredentialModal(){
     document
         .getElementById("credentialModal")
@@ -142,7 +146,6 @@ function closeCredentialModal(){
 
     clearErrors();
 }
-
 function updateCredential(){
     const data = {
         currentUsername: document.getElementById("currentUsername").value,
@@ -169,16 +172,15 @@ function updateCredential(){
         window.location.href = "/login";
     })
     .catch(error => {
-//        alert(error.message);
+        console.log(error.message);
     });
 }
 
-// Thêm phim
+// Thêm, sửa phim
 function openCreateMovieModal() {
     document.getElementById("createMovieModal")
         .classList.remove("hidden");
 }
-
 function closeCreateMovieModal() {
     document.getElementById("createMovieModal")
         .classList.add("hidden");
@@ -186,12 +188,10 @@ function closeCreateMovieModal() {
     document.getElementById("createMovieForm").reset();
     clearMovieErrors();
 }
-
 function clearMovieErrors() {
     document.querySelectorAll(".error-text")
         .forEach(e => e.innerText = "");
 }
-
 function showMovieErrors(errors) {
 
     clearMovieErrors();
@@ -214,11 +214,12 @@ function showMovieErrors(errors) {
     if (errors.poster)
         document.getElementById("posterError").innerText = errors.poster;
 }
-
-function createMovie() {
+function saveMovie() {
 
     const formData = new FormData();
+    const movieId = document.getElementById("movieId").value;
 
+    formData.append("movieId",movieId);
     formData.append("title", document.getElementById("title").value);
     formData.append("description", document.getElementById("description").value);
     formData.append("duration", document.getElementById("duration").value);
@@ -236,7 +237,9 @@ function createMovie() {
     document.querySelectorAll("input[name='genreIds']:checked")
         .forEach(cb => formData.append("genreIds", cb.value));
 
-    fetch("/admin/movies/create", {
+    const url = movieId ? "/admin/movies/update" : "/admin/movies/create";
+
+    fetch(url, {
         method: "POST",
         body: formData
     })
@@ -251,12 +254,111 @@ function createMovie() {
     .then(() => {
         closeCreateMovieModal();
         // reload list giống profile
-        loadContent("/admin/movies/content");
+       loadContent("/admin/movies/content");
+
     })
     .catch(err => {
         console.log(err);
     });
 }
+function previewPoster(input) {
 
+    const file = input.files[0];
+
+    if (!file) {
+        document.getElementById("posterPreview").src ="/posters/default.png";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        document.getElementById("posterPreview").src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+}
+
+// xóa phim
+function deleteMovie(btn) {
+
+    const movieId = btn.dataset.id;
+
+    if (!confirm("Bạn có chắc muốn xóa phim này?")) {
+        return;
+    }
+
+    fetch("/admin/movies/delete/" + movieId, {
+        method: "POST"
+    })
+    .then(async response => {
+
+        if (!response.ok) {
+
+            const message = await response.text();
+
+            alert(message);
+
+            throw new Error();
+        }
+
+        return response.text();
+    })
+    .then(() => {
+
+        alert("Xóa thành công");
+
+        loadContent("/admin/movies/content");
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+// sửa phim
+function openEditMovieModal(btn){
+
+    const movieId = btn.dataset.id;
+
+    fetch("/admin/movies/" + movieId)
+    .then(res => res.json())
+    .then(movie => {
+
+        document.getElementById("movieId").value = movie.movieId;
+
+        document.getElementById("title").value = movie.title;
+
+        document.getElementById("description").value = movie.description || "";
+
+        document.getElementById("duration").value = movie.duration;
+
+        document.getElementById("releaseDate").value = movie.releaseDate;
+
+        document.getElementById("language").value = movie.language || "";
+
+        document.getElementById("status").value = movie.status;
+
+        document.getElementById("posterPreview").src = movie.posterUrl || "/posters/default.png";
+
+        document.querySelectorAll("input[name='genreIds']").forEach(cb => cb.checked = false);
+
+        movie.genres.forEach(g => {
+            const checkbox =document.querySelector(`input[name='genreIds'][value='${g.genreId}']`);
+            if(checkbox)checkbox.checked = true;
+        });
+
+        openCreateMovieModal();
+    });
+
+
+}
+
+// search phim
+function searchMovies() {
+
+    const keyword =document.getElementById("search").value;
+
+    loadContent("/admin/movies/content?keyword=" + encodeURIComponent(keyword));
+}
 
 

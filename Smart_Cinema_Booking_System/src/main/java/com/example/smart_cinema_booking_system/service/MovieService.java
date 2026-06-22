@@ -3,8 +3,10 @@ package com.example.smart_cinema_booking_system.service;
 import com.example.smart_cinema_booking_system.model.dto.MovieRequest;
 import com.example.smart_cinema_booking_system.model.entity.Genre;
 import com.example.smart_cinema_booking_system.model.entity.Movie;
+import com.example.smart_cinema_booking_system.repository.BookingRepository;
 import com.example.smart_cinema_booking_system.repository.GenreRepository;
 import com.example.smart_cinema_booking_system.repository.MovieRepository;
+import com.example.smart_cinema_booking_system.repository.ShowtimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,8 @@ public class MovieService {
     private final MovieRepository movieRepo;
     private final GenreRepository genreRepo;
     private final FileUploadService fileUploadService;
+    private final ShowtimeRepository showtimeRepo;
+    private final BookingRepository bookingRepo;
 
     private final String UPLOAD_DIR = "uploads/posters/";
 
@@ -33,7 +37,7 @@ public class MovieService {
         return movieRepo.findByTitleContainingIgnoreCase(keyword, pageable);
     }
 
-    // create, update movie
+    // create movie
     public void save(MovieRequest req) {
 
         Movie movie = (req.getMovieId() != null)
@@ -52,27 +56,45 @@ public class MovieService {
         movie.setGenres(genres);
 
         // POSTER
-        String posterUrl = fileUploadService.uploadPoster(req.getPoster());
-        movie.setPosterUrl(posterUrl);
+        if(req.getPoster() != null && !req.getPoster().isEmpty()){
 
+            fileUploadService.deletePoster(movie.getPosterUrl());
+
+            movie.setPosterUrl(fileUploadService.uploadPoster(req.getPoster()));
+        }
         movieRepo.save(movie);
     }
 
     // delete movie
-    public void delete(Long id) {
+    public void delete(Long movieId) {
 
-        Movie movie = movieRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Not found"));
+        Movie movie = movieRepo.findById(movieId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy phim"));
 
-        boolean hasBooking =
-                movie.getShowtimes()
-                        .stream()
-                        .anyMatch(s -> !s.getBookings().isEmpty());
+        // 1. Có suất chiếu
+        if (showtimeRepo.existsByMovieMovieId(movieId)) {
+            throw new RuntimeException(
+                    "Không thể xóa phim đang có suất chiếu"
+            );
+        }
 
-        if (hasBooking) {
-            throw new RuntimeException("Movie has bookings or showtimes");
+        // 2. Có người đặt vé
+        if (bookingRepo.countByShowtimeMovieMovieId(movieId) > 0) {
+            throw new RuntimeException(
+                    "Không thể xóa phim đã có người đặt vé"
+            );
         }
 
         movieRepo.delete(movie);
+        fileUploadService.deletePoster(movie.getPosterUrl());
     }
+
+    //
+    public Movie findById(Long id){
+        return movieRepo.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("không tìm thấy phim"));
+    }
+
+
 }
