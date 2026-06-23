@@ -45,7 +45,9 @@
 
 <!--FOOTER-->
 <div th:replace="~{fragments/footer :: footer}"></div>
-
+<script>
+    localStorage.setItem("activeMenu", "dashboard");
+</script>
 <script th:src="@{/js/dashboard.js}"></script>
 
 </body>

@@ -80,6 +80,36 @@ function goToPage(page){
     );
 }
 
+function setActiveMenu(element){
+
+    document
+        .querySelectorAll(".sidebar-link")
+        .forEach(link => link.classList.remove("active"));
+
+    element.classList.add("active");
+
+    localStorage.setItem("activeMenu",element.dataset.menu);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    const activeMenu = localStorage.getItem("activeMenu");
+
+    console.log(activeMenu);
+
+    if(activeMenu){
+
+        const menu = document.querySelector(`[data-menu="${activeMenu}"]`);
+
+        if(menu) menu.classList.add("active");
+
+    }else{
+
+        // mặc định sáng Trang chủ
+        document.querySelector('[data-menu="dashboard"]')?.classList.add("active");
+    }
+});
+
 // chỉnh sửa thông tin cá nhân
 function openProfileModal(){
     document
@@ -176,14 +206,19 @@ function updateCredential(){
     });
 }
 
-// Thêm, sửa phim
+// Thêm phim (dùng chung modal cho sửa phim)
 function openCreateMovieModal() {
-    document.getElementById("createMovieModal")
-        .classList.remove("hidden");
+    document.getElementById("movieModalTitle").innerText = "Thêm phim mới";
+    document.getElementById("createMovieModal").classList.remove("hidden");
 }
 function closeCreateMovieModal() {
-    document.getElementById("createMovieModal")
-        .classList.add("hidden");
+    document.getElementById("createMovieModal").classList.add("hidden");
+
+    document.getElementById("posterPreview").src = "/posters/default.png";
+
+    document.getElementById("movieId").value = "";
+
+    document.getElementById("movieModalTitle").innerText = "";
 
     document.getElementById("createMovieForm").reset();
     clearMovieErrors();
@@ -318,6 +353,8 @@ function deleteMovie(btn) {
 // sửa phim
 function openEditMovieModal(btn){
 
+    document.getElementById("movieModalTitle").innerText = "Chỉnh sửa thông tin phim";
+
     const movieId = btn.dataset.id;
 
     fetch("/admin/movies/" + movieId)
@@ -347,7 +384,7 @@ function openEditMovieModal(btn){
             if(checkbox)checkbox.checked = true;
         });
 
-        openCreateMovieModal();
+        document.getElementById("createMovieModal").classList.remove("hidden");
     });
 
 

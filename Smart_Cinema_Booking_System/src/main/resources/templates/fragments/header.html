@@ -17,7 +17,8 @@
 
 
         <form th:action="@{/logout}" method="post">
-            <button class="logout-btn">
+            <button class="logout-btn"
+                    onclick="localStorage.removeItem('activeMenu')">
                 Đăng xuất
             </button>
         </form>

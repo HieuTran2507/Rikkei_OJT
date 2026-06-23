@@ -12,14 +12,17 @@
 
     <li>
       <a th:href="@{/dashboard}"
-         class="sidebar-link">
+         class="sidebar-link"
+         data-menu="dashboard"
+         onclick="setActiveMenu(this)">
         Trang chủ
       </a>
     </li>
 
     <li>
       <a href="#"
-         onclick="loadContent('/profile/content')"
+         onclick="setActiveMenu(this); loadContent('/profile/content')"
+         data-menu="profile"
          class="sidebar-link">
         Thông tin cá nhân
       </a>
@@ -27,20 +30,26 @@
 
     <!-- USER -->
     <li sec:authorize="hasRole('USER')">
-      <a th:href="@{user/booking}" class="sidebar-link">
+      <a th:href="@{user/booking}"
+         class="sidebar-link"
+         onclick="setActiveMenu(this);">
         Đặt vé
       </a>
     </li>
 
     <li sec:authorize="hasRole('USER')">
-      <a th:href="@{user/history}" class="sidebar-link">
+      <a th:href="@{user/history}"
+         onclick="setActiveMenu(this);"
+         class="sidebar-link">
         Lịch sử đặt vé
       </a>
     </li>
 
     <!-- STAFF -->
     <li sec:authorize="hasRole('STAFF')">
-      <a th:href="@{/staff/tickets}" class="sidebar-link">
+      <a th:href="@{/staff/tickets}"
+         onclick="setActiveMenu(this);"
+         class="sidebar-link">
         Kiểm tra vé
       </a>
     </li>
@@ -48,20 +57,26 @@
     <!-- ADMIN -->
     <li sec:authorize="hasRole('ADMIN')">
       <a href="#"
-         onclick="loadContent('/admin/movies/content')"
+         onclick="setActiveMenu(this); loadContent('/admin/movies/content')"
+         data-menu="movies"
          class="sidebar-link">
         Quản lý phim
       </a>
     </li>
 
     <li sec:authorize="hasRole('ADMIN')">
-      <a th:href="@{/admin/showtimes}" class="sidebar-link">
+      <a th:href="@{/admin/showtimes}"
+         onclick="setActiveMenu(this);"
+         data-menu="showtimes"
+         class="sidebar-link">
         Quản lý xuất chiếu
       </a>
     </li>
 
     <li sec:authorize="hasRole('ADMIN')">
-      <a th:href="@{/admin/reports}" class="sidebar-link">
+      <a th:href="@{/admin/reports}"
+         onclick="setActiveMenu(this);"
+         class="sidebar-link">
         Báo cáo
       </a>
     </li>

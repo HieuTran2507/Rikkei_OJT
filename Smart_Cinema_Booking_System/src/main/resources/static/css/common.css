@@ -179,6 +179,12 @@ body {
     transform: translateX(5px);
 }
 
+.sidebar-link.active {
+    background-color: #fbbf24;
+    color: #1e293b;
+    font-weight: 600;
+}
+
 /* ===== FOOTER ===== */
 .dashboard-footer {
 
