@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="createShowtimeModal">
+
+    <div id="createShowtimeModal" class="movie-modal-overlay hidden">
+
+        <div class="movie-modal-box">
+
+            <div class="movie-modal-header">
+                <h3 id="showtimeModalTitle">
+                    title
+                </h3>
+
+                <button onclick="closeCreateShowtimeModal()">
+                    ✕
+                </button>
+            </div>
+
+            <form id="showtimeForm" class="movie-form">
+
+                <input type="hidden" id="showtimeId">
+
+                <!-- MOVIE -->
+                <div class="movie-form-group">
+                    <label>Phim</label>
+
+                    <select id="movieId" onchange="calculateEndTime()">
+                        <option value="">
+                            Chọn phim
+                        </option>
+
+                        <option th:each="m : ${movies}"
+                                th:value="${m.movieId}"
+                                th:text="${m.title}"
+                                th:attr="data-duration=${m.duration}">>
+                        </option>
+                    </select>
+
+                    <p id="movieError" class="error-text"></p>
+                </div>
+
+                <!-- ROOM -->
+                <div class="movie-form-group">
+                    <label>Phòng</label>
+
+                    <select id="roomId">
+
+                        <option value="">
+                            Chọn phòng
+                        </option>
+
+                        <option th:each="r : ${rooms}"
+                                th:value="${r.roomId}"
+                                th:text="${r.roomName}">
+                        </option>
+
+                    </select>
+
+                    <p id="roomError" class="error-text"></p>
+                </div>
+
+                <!-- START -->
+                <div class="movie-form-group">
+                    <label>Giờ bắt đầu</label>
+
+                    <input type="datetime-local" id="startTime" onchange="calculateEndTime()">
+
+                    <p id="startTimeError" class="error-text"></p>
+                </div>
+
+                <!-- END -->
+                <div class="movie-form-group">
+                    <label>Giờ kết thúc</label>
+
+                    <input type="datetime-local" id="endTime" readonly>
+                </div>
+
+                <!-- STATUS -->
+                <div class="movie-form-group">
+                    <label>Trạng thái</label>
+
+                    <select id="showtimeStatus">
+                        <option value="OPEN">OPEN</option>
+                        <option value="CLOSED">CLOSED</option>
+                        <option value="CLOSED">CANCELLED</option>
+                    </select>
+                </div>
+
+                <!-- PRICE -->
+                <div class="movie-form-group">
+                    <label>Giá vé</label>
+
+                    <input type="number" id="ticketPrice">
+
+                    <p id="ticketPriceError" class="error-text"></p>
+                </div>
+
+                <!-- BUTTON -->
+                <div class="movie-form-actions">
+                    <button type="button"
+                            onclick="saveShowtime()"
+                            class="profile-btn-primary">
+                        Lưu
+                    </button>
+
+                    <button type="button"
+                            onclick="closeCreateShowtimeModal()"
+                            class="profile-btn-secondary">
+                        Hủy
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+</html>

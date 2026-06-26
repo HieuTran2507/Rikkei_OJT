@@ -10,72 +10,72 @@
                    placeholder="Search..."
                    class="border px-3 py-2 rounded w-80">
 
-            <button onclick="searchMovies()"
+            <button onclick="searchShowtimes()"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
                 Search
             </button>
         </div>
 
 
-        <button onclick="openCreateMovieModal()"
+        <button onclick="openCreateShowtimeModal()"
                 class="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded font-semibold">
-            + Thêm phim
+            + Thêm xuất chiếu
         </button>
 
     </div>
 
     <!-- TABLE -->
-    <div th:if="${movies != null and movies.totalElements > 0}">
+    <div th:if="${showtimes != null and showtimes.totalElements > 0}">
 
         <table class="movie-table">
-
             <thead>
             <tr>
-                <th>Poster</th>
                 <th>Tên phim</th>
-                <th>Thời lượng</th>
+                <th>Tên phòng</th>
+                <th>Bắt đầu</th>
+                <th>kết thúc</th>
                 <th>Trạng thái</th>
+                <th>Giá vé</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
 
             <tbody>
 
-            <tr th:each="m : ${movies.content}" class="movie-row">
+            <tr th:each="s : ${showtimes.content}" class="movie-row">
 
-                <td>
-                    <img th:src="${m.posterUrl != null ?
-                            m.posterUrl : '/posters/default.png'}"
-                         class="movie-poster"
-                    >
-                </td>
+                <td th:text="${s.movie.title}"></td>
 
-                <td th:text="${m.title}"></td>
+                <td th:text="${s.room.roomName}"></td>
 
-                <td th:text="${m.duration} + ' phút'"></td>
+                <td th:text="${#temporals.format(s.startTime, 'dd/MM/yyyy HH:mm')}"></td>
+
+                <td th:text="${#temporals.format(s.endTime, 'dd/MM/yyyy HH:mm')}"></td>
 
                 <td>
                     <span class="movie-status"
-                          th:text="${m.status}"
+                          th:text="${s.status}"
                           th:classappend="${
-                              m.status.name() == 'NOW_SHOWING' ? 'movie-status-now' :
-                              m.status.name() == 'COMING_SOON' ? 'movie-status-soon' :
+                              s.status.name() == 'OPEN' ? 'movie-status-now' :
+                              s.status.name() == 'CLOSED' ? 'movie-status-soon' :
                               'movie-status-stop'
                           }">
                     </span>
                 </td>
 
+                <td th:text="${s.ticketPrice}"></td>
+
                 <td class="space-x-2">
 
                     <button class="movie-btn-edit"
-                            th:attr="data-id=${m.movieId}"
-                            onclick="openEditMovieModal(this)">
+                            th:attr="data-id=${s.showtimeId}"
+                            onclick="openEditShowtimeModal(this)">
                         Sửa
                     </button>
 
                     <button class="movie-btn-delete"
-                            th:attr="data-id=${m.movieId}"
-                            onclick="deleteMovie(this)">
+                            th:attr="data-id=${s.showtimeId}"
+                            onclick="deleteShowtime(this)">
                         Xóa
                     </button>
 
@@ -92,40 +92,37 @@
 
             <!-- Prev -->
             <button class="pagination-btn"
-                    th:if="${movies.hasPrevious()}"
-                    th:onclick="'goToPage(' + ${movies.number - 1} + ',\'movies\')'">
+                    th:if="${showtimes.hasPrevious()}"
+                    th:onclick="'goToPage(' + ${showtimes.number - 1} + ',\'showtimes\')'">
                 Prev
             </button>
 
             <!-- Page numbers -->
             <button class="pagination-btn"
-                    th:each="i : ${#numbers.sequence(0, movies.totalPages - 1)}"
+                    th:each="i : ${#numbers.sequence(0, showtimes.totalPages - 1)}"
                     th:text="${i + 1}"
-                    th:classappend="${i == movies.number} ? 'active-page' : ''"
-                    th:onclick="'goToPage(' + ${i} + ',\'movies\')'">
+                    th:classappend="${i == showtimes.number} ? 'active-page' : ''"
+                    th:onclick="'goToPage(' + ${i} + ',\'showtimes\')'">
             </button>
 
             <!-- Next -->
             <button class="pagination-btn"
-                    th:if="${movies.hasNext()}"
-                    th:onclick="'goToPage(' + ${movies.number + 1} + ',\'movies\')'">
+                    th:if="${showtimes.hasNext()}"
+                    th:onclick="'goToPage(' + ${showtimes.number + 1} + ',\'showtimes\')'">
                 Next
             </button>
 
         </div>
-
     </div>
 
     <!-- EMPTY -->
-    <div th:if="${movies == null or movies.totalElements == 0}"
+    <div th:if="${showtimes == null or showtimes.totalElements == 0}"
          class="movie-empty-box">
 
         <div class="text-xl font-semibold">
-            Không có phim trong danh sách
+            Không có xuất chiếu trong danh sách
         </div>
     </div>
-
-    <div th:replace="~{admin/add-movies-modal :: createMovieModal}"></div>
+    <div th:replace="~{admin/add-showtime-modal :: createShowtimeModal}"></div>
 </div>
-
 </html>

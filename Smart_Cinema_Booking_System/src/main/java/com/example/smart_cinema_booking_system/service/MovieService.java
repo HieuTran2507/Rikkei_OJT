@@ -74,7 +74,7 @@ public class MovieService {
         // 1. Có suất chiếu
         if (showtimeRepo.existsByMovieMovieId(movieId)) {
             throw new RuntimeException(
-                    "Không thể xóa phim đang có suất chiếu"
+                    "Không thể xóa phim đang có xuất chiếu"
             );
         }
 
@@ -91,10 +91,13 @@ public class MovieService {
 
     //
     public Movie findById(Long id){
-        return movieRepo.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("không tìm thấy phim"));
+        return movieRepo.findById(id).orElseThrow(() ->
+                new RuntimeException("không tìm thấy phim"));
     }
 
+    // get all movie
+    public List<Movie> getAllMovies(){
+        return movieRepo.findAll();
+    }
 
 }

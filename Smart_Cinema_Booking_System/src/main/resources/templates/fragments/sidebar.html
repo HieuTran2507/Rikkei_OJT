@@ -65,8 +65,8 @@
     </li>
 
     <li sec:authorize="hasRole('ADMIN')">
-      <a th:href="@{/admin/showtimes}"
-         onclick="setActiveMenu(this);"
+      <a href="#"
+         onclick="setActiveMenu(this); loadContent('/admin/showtimes/content')"
          data-menu="showtimes"
          class="sidebar-link">
         Quản lý xuất chiếu

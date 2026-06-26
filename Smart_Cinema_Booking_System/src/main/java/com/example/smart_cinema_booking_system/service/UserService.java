@@ -84,7 +84,8 @@ public class UserService {
 
         if (!user.getEmail().equals(request.getEmail()) &&
                 ur.existsByEmail(request.getEmail())) {
-            throw new RuntimeException(
+            throw new FieldException(
+                    "email",
                     "Email đã tồn tại"
             );
         }

@@ -1,10 +1,12 @@
 package com.example.smart_cinema_booking_system.controller;
 
-import com.example.smart_cinema_booking_system.model.ENUM.MovieStatus;
 import com.example.smart_cinema_booking_system.model.dto.MovieRequest;
-import com.example.smart_cinema_booking_system.model.entity.Movie;
-import com.example.smart_cinema_booking_system.repository.GenreRepository;
+import com.example.smart_cinema_booking_system.model.dto.ShowtimeRequest;
+import com.example.smart_cinema_booking_system.model.dto.ShowtimeResponse;
+import com.example.smart_cinema_booking_system.model.entity.Showtime;
 import com.example.smart_cinema_booking_system.service.MovieService;
+import com.example.smart_cinema_booking_system.service.RoomService;
+import com.example.smart_cinema_booking_system.service.ShowtimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,12 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/admin/movies")
+@RequestMapping("/admin/showtimes")
 @RequiredArgsConstructor
-public class AdminMovieController {
-
+public class AdminShowtimesController {
+    private final ShowtimeService showtimeService;
     private final MovieService movieService;
-    private final GenreRepository genreRepo;
+    private final RoomService roomService;
     private final int pageSize = 2;
 
     // LOAD PAGE
@@ -35,22 +37,24 @@ public class AdminMovieController {
             @RequestParam(defaultValue = "0") int page,
             Model model
     ) {
+        Pageable pageable = PageRequest.of(page,pageSize);
 
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Showtime> showtimes = showtimeService.getShowtimes(keyword,pageable);
 
-        Page<Movie> movies = movieService.getMovies(keyword, pageable);
-
-        model.addAttribute("movies", movies);
+        model.addAttribute("showtimes", showtimes);
         model.addAttribute("keyword", keyword);
 
-        return "admin/movie-content";
+        model.addAttribute("movies", movieService.getAllMovies());
+        model.addAttribute("rooms", roomService.getAllRooms());
+
+        return "admin/showtime-content";
     }
 
     // CREATE
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity<?> createMovie(
-            @Valid @ModelAttribute MovieRequest req,
+    public ResponseEntity<?> createShowtime(
+            @Valid @ModelAttribute ShowtimeRequest req,
             BindingResult bindingResult
     ) {
 
@@ -66,26 +70,8 @@ public class AdminMovieController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        movieService.save(req);
+        showtimeService.save(req);
 
-        return ResponseEntity.ok("success");
-    }
-
-    // UPDATE
-    @PostMapping("/update")
-    public ResponseEntity<?> update(
-            @Valid @ModelAttribute MovieRequest req,
-            BindingResult bindingResult
-    ) {
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(e ->
-                    errors.put(e.getField(), e.getDefaultMessage())
-            );
-            return ResponseEntity.badRequest().body(errors);
-        }
-        movieService.save(req);
         return ResponseEntity.ok("success");
     }
 
@@ -94,8 +80,7 @@ public class AdminMovieController {
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
-
-            movieService.delete(id);
+            showtimeService.delete(id);
             return ResponseEntity.ok("deleted");
 
         } catch (RuntimeException ex) {
@@ -109,9 +94,25 @@ public class AdminMovieController {
     // EDIT
     @GetMapping("/{id}")
     @ResponseBody
-    public Movie getMovie(
-            @PathVariable Long id
-    ){
-        return movieService.findById(id);
+    public ShowtimeResponse getShowtime(@PathVariable Long id){
+        return showtimeService.getResponseById(id);
+    }
+
+    // UPDATE
+    @PostMapping("/update")
+    public ResponseEntity<?> update(
+            @Valid @ModelAttribute ShowtimeRequest req,
+            BindingResult bindingResult
+    ) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(e ->
+                    errors.put(e.getField(), e.getDefaultMessage())
+            );
+            return ResponseEntity.badRequest().body(errors);
+        }
+        showtimeService.save(req);
+        return ResponseEntity.ok("success");
     }
 }
