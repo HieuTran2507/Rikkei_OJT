@@ -42,6 +42,7 @@ public class AdminMovieController {
 
         model.addAttribute("movies", movies);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("genres", genreRepo.findAll());
 
         return "admin/movie-content";
     }

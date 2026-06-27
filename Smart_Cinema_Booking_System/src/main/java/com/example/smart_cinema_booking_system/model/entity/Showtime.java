@@ -44,4 +44,7 @@ public class Showtime {
 
     @OneToMany(mappedBy = "showtime")
     private List<Booking> bookings;
+
+    @OneToMany(mappedBy = "showtime")
+    private List<Ticket> tickets;
 }

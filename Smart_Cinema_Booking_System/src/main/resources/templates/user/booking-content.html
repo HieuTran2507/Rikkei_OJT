@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="bg-white rounded-xl shadow p-6">
+  <div class="booking-content">
+    <div class="grid grid-cols-3 gap-6">
+
+      <!-- LEFT -->
+      <section class="col-span-2 bg-white rounded-xl shadow p-6">
+
+        <h3 class="text-xl font-semibold mb-4">
+          Chọn suất chiếu
+        </h3>
+
+        <!-- hiển thị suất chiếu -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-8">
+          <button type="button"
+                  th:each="showtime : ${showtimes}"
+                  class="showtime-btn border rounded-xl p-4 text-left hover:border-yellow-500 hover:shadow-md transition flex gap-4 items-start bg-white"
+                  th:data-showtime-id="${showtime.showtimeId}"
+                  th:data-ticket-price="${showtime.ticketPrice}"
+                  th:data-seats-x="${showtime.room.seatsX}"
+                  th:data-seats-y="${showtime.room.seatsY}"
+                  th:data-total-seats="${showtime.room.totalSeats}"
+                  th:data-vip-seats="${showtime.room.vipSeats}"
+                  th:data-couple-seats="${showtime.room.coupleSeats}">
+
+            <!-- POSTER LEFT -->
+            <img th:src="@{${showtime.movie.posterUrl}}"
+                 alt="Poster phim"
+                 class="w-24 h-32 object-cover rounded-lg border border-gray-200 flex-shrink-0">
+
+            <!-- INFO RIGHT -->
+            <div class="flex-1 min-w-0">
+
+              <p class="font-bold text-lg text-gray-900 mb-2 truncate"
+                 th:text="${showtime.movie.title}">
+                Tên phim
+              </p>
+
+              <div class="space-y-1 text-sm text-gray-600">
+                <p>
+                  <span class="font-semibold text-gray-700">Phòng:</span>
+                  <span th:text="${showtime.room.roomName}">Phòng</span>
+                </p>
+
+                <p>
+                  <span class="font-semibold text-gray-700">Giờ chiếu:</span>
+                  <span th:text="${#temporals.format(showtime.startTime, 'dd/MM/yyyy HH:mm')}">
+            Giờ chiếu
+          </span>
+                </p>
+
+                <p>
+                  <span class="font-semibold text-gray-700">Giá vé:</span>
+                  <span class="font-bold text-yellow-600"
+                        th:text="${#numbers.formatDecimal(showtime.ticketPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'">
+            0 VND
+          </span>
+                </p>
+              </div>
+
+            </div>
+          </button>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-4">
+          Chọn ghế
+        </h3>
+
+        <div class="bg-slate-800 text-white text-center py-2 rounded mb-6">
+          MÀN HÌNH
+        </div>
+
+        <div id="seatMap" class="grid gap-2">
+          <!-- JS render ghế -->
+        </div>
+
+      </section>
+
+      <!-- RIGHT -->
+      <aside class="bg-white rounded-xl shadow p-6">
+
+        <h3 class="text-xl font-semibold mb-4">
+          Thanh toán
+        </h3>
+
+        <div class="mb-4">
+          <p class="text-gray-500">Ghế đã chọn</p>
+          <p id="selectedSeats" class="font-bold">
+            Chưa chọn
+          </p>
+        </div>
+
+        <div class="mb-4">
+          <p class="text-gray-500">Tổng tiền</p>
+          <p id="totalAmount" class="font-bold text-yellow-600">
+            0 VND
+          </p>
+        </div>
+
+        <select id="paymentMethod"
+                class="w-full border rounded-lg p-3 mb-4">
+          <option value="CASH">Tiền mặt</option>
+          <option value="BANKING">Chuyển khoản</option>
+          <option value="CARD">Thẻ ngân hàng</option>
+        </select>
+
+        <div id="holdCountdown" class="hidden text-center text-green-600 font-semibold py-2 mb-4 bg-green-50 rounded-lg border border-green-200">
+          Giữ ghế thành công! Vui lòng thanh toán trong <span id="countdownSeconds">59</span>s
+        </div>
+
+        <button id="bookingActionBtn"
+                class="w-full bg-yellow-500 hover:bg-yellow-600 rounded-lg py-3 font-bold">
+          Xác nhận giữ ghế
+        </button>
+
+      </aside>
+
+    </div>
+
+  </div>
+</div>
+
+</html>

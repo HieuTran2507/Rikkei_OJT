@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "bookings")
@@ -44,4 +45,7 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "showtime_id")
     private Showtime showtime;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private List<Ticket> tickets;
 }

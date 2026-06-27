@@ -103,4 +103,8 @@ public class ShowtimeService {
 
         return response;
     }
+
+    public List<Showtime> findAll(){
+        return showtimeRepo.findAll();
+    }
 }

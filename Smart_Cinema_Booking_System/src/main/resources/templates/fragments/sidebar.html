@@ -30,16 +30,16 @@
 
     <!-- USER -->
     <li sec:authorize="hasRole('USER')">
-      <a th:href="@{user/booking}"
+      <a href="#"
          class="sidebar-link"
-         onclick="setActiveMenu(this);">
+         onclick="setActiveMenu(this); loadContent('/user/booking')">
         Đặt vé
       </a>
     </li>
 
     <li sec:authorize="hasRole('USER')">
-      <a th:href="@{user/history}"
-         onclick="setActiveMenu(this);"
+      <a href="#"
+         onclick="setActiveMenu(this); loadContent('/user/history')"
          class="sidebar-link">
         Lịch sử đặt vé
       </a>
