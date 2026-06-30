@@ -46,16 +46,16 @@
                 <p>
                   <span class="font-semibold text-gray-700">Giờ chiếu:</span>
                   <span th:text="${#temporals.format(showtime.startTime, 'dd/MM/yyyy HH:mm')}">
-            Giờ chiếu
-          </span>
+                    Giờ chiếu
+                  </span>
                 </p>
 
                 <p>
                   <span class="font-semibold text-gray-700">Giá vé:</span>
                   <span class="font-bold text-yellow-600"
                         th:text="${#numbers.formatDecimal(showtime.ticketPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'">
-            0 VND
-          </span>
+                      0 VND
+                  </span>
                 </p>
               </div>
 
@@ -106,7 +106,7 @@
         </select>
 
         <div id="holdCountdown" class="hidden text-center text-green-600 font-semibold py-2 mb-4 bg-green-50 rounded-lg border border-green-200">
-          Giữ ghế thành công! Vui lòng thanh toán trong <span id="countdownSeconds">59</span>s
+          Giữ ghế thành công! Vui lòng thanh toán trong <span id="countdownSeconds">seconds</span>s
         </div>
 
         <button id="bookingActionBtn"

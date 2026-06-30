@@ -34,8 +34,17 @@ function goToPage(page, mode){
               + page
               + "&keyword="
               + encodeURIComponent(keyword)
-          );
-      }
+      );
+   }
+
+   if (mode === "history") {
+         loadContent(
+                 "/user/history?page="
+                 + page
+                 + "&keyword="
+                 + encodeURIComponent(keyword)
+         );
+   }
 
 }
 function setActiveMenu(element){

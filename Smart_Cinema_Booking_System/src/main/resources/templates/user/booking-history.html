@@ -1,7 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div class="bg-white rounded-xl shadow p-6">
-  booking history
+  <!-- SEARCH + ADD -->
+  <div class="flex justify-between mb-4">
+    <div class="flex gap-2">
+      <input type="text"
+             id="search"
+             th:value="${keyword}"
+             placeholder="tìm kiếm bằng tên phim"
+             class="border px-3 py-2 rounded w-80">
+
+      <button onclick="searchHistory()"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+        Search
+      </button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div th:if="${history != null and history.totalElements > 0}">
+    <table class="movie-table">
+      <thead>
+      <tr>
+        <th>Tên phim</th>
+        <th>Tên phòng</th>
+        <th>Ghế</th>
+        <th>Thời gian</th>
+        <th>Giá vé</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="h : ${history.content}" class="movie-row">
+        <td th:text="${h.showtime.movie.title}"></td>
+        <td th:text="${h.showtime.room.roomName}"></td>
+        <td th:text="${h.bookingSeat}"></td>
+        <td th:text="${#temporals.format(h.bookingDate, 'dd/MM/yyyy HH:mm')}"></td>
+        <td th:text="${#numbers.formatDecimal(h.totalAmount, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- PAGINATION -->
+    <div class="flex justify-center gap-2 mt-4">
+
+      <!-- Prev -->
+      <button class="pagination-btn"
+              th:if="${history.hasPrevious()}"
+              th:onclick="'goToPage(' + ${history.number - 1} + ',\'history\')'">
+        Prev
+      </button>
+
+      <!-- Page numbers -->
+      <button class="pagination-btn"
+              th:each="i : ${#numbers.sequence(0, history.totalPages - 1)}"
+              th:text="${i + 1}"
+              th:classappend="${i == history.number} ? 'active-page' : ''"
+              th:onclick="'goToPage(' + ${i} + ',\'history\')'">
+      </button>
+
+      <!-- Next -->
+      <button class="pagination-btn"
+              th:if="${history.hasNext()}"
+              th:onclick="'goToPage(' + ${history.number + 1} + ',\'history\')'">
+        Next
+      </button>
+
+    </div>
+  </div>
+
+  <!-- EMPTY -->
+  <div th:if="${history == null or history.totalElements == 0}"
+       class="movie-empty-box">Lịch sử đặt vé trống.</div>
+
 </div>
 
 </html>

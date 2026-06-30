@@ -18,7 +18,9 @@ document.addEventListener("click", function (e) {
                 return;
         }
 
-        const btn = e.target.closest(".showtime-btn"); // Từ phần tử vừa được click, tìm ngược lên các thẻ cha gần nhất có class .showtime-btn
+        // Từ phần tử vừa được click, tìm ngược lên các thẻ cha gần nhất có class .showtime-btn
+        // lây hết các thành phần html nằm trong .showtime-btn
+        const btn = e.target.closest(".showtime-btn");
 
         selectedShowtimeId = btn.dataset.showtimeId;
         ticketPrice = Number(btn.dataset.ticketPrice);
@@ -30,7 +32,6 @@ document.addEventListener("click", function (e) {
         btn.classList.add("border-yellow-500", "bg-yellow-50");
 
         renderSeats(btn);
-        updateSummary();
         loadSeatsStatus(selectedShowtimeId);
     }
 
@@ -86,11 +87,14 @@ function renderSeats(btn) {
                 return;
             }
 
+            // 65~A, 66~B
             const seatCode = String.fromCharCode(65 + row) + col;
 
             if (coupleSeats.has(seatCode)) {
                 const pair = getCouplePair(seatCode, btn.dataset.coupleSeats);
 
+                // điều kiện đảm bảo lấy đúng cặp ghế thông qua ghế 1
+                // ghế 2 sẽ bị skip
                 if (pair && pair.first !== seatCode) {
                     continue;
                 }
@@ -126,9 +130,9 @@ function renderSeats(btn) {
 }
 
 function parseSeatList(value) {
-    if (!value) {
-        return new Set();
-    }
+    // sử dụng set thay vì mảng vì set ko chứa giá trị trùng lập
+    if (!value) return new Set();
+
 
     return new Set(
         value.split(",")
@@ -138,11 +142,10 @@ function parseSeatList(value) {
 }
 
 function parseCoupleSeats(value) {
+    // sử dụng set thay vì mảng vì set ko chứa giá trị trùng lập
     const result = new Set();
 
-    if (!value) {
-        return result;
-    }
+    if (!value) return result;
 
     value.split(",").forEach(pair => {
         const seats = pair.trim().split("-");
@@ -157,15 +160,12 @@ function parseCoupleSeats(value) {
 }
 
 function getCouplePair(seatCode, value) {
-    if (!value) {
-        return null;
-    }
+    if (!value) return null;
 
     const pairs = value.split(",");
 
     for (const pairText of pairs) {
         const seats = pairText.trim().split("-");
-
         if (seats.length !== 2) {
             continue;
         }
@@ -191,8 +191,8 @@ function loadSeatsStatus(showtimeId) {
                     if (codes.includes(seatCode)) {
                         if (status === "PENDING") {
                             btn.className = btn.className
-                                .replace(/bg-\S+/g, "")
-                                .replace(/hover:bg-\S+/g, ""
+                                .replace(/bg-\S+/g, "") // xóa tất cả class bg-xxx hiện tại
+                                .replace(/hover:bg-\S+/g, "" // xóa tất cả class hover:bg-xxx
                             ).trim() + " bg-orange-300 text-orange-800 cursor-not-allowed opacity-70";
                         } else if (status === "PAID") {
                             btn.className = btn.className
@@ -354,4 +354,10 @@ function payBooking() {
     .catch(error => {
         alert(error.message);
     });
+}
+
+// tìm kiếm lịch sử bằng tên phim
+function searchHistory() {
+    const keyword = document.getElementById("search").value;
+    loadContent("/user/history?keyword=" + encodeURIComponent(keyword));
 }

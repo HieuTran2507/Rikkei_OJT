@@ -13,6 +13,8 @@ import com.example.smart_cinema_booking_system.repository.ShowtimeRepository;
 import com.example.smart_cinema_booking_system.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,7 @@ public class BookingService {
     private final ShowtimeRepository showtimeRepository;
     private final UserService userService;
 
+    // trạng thái ghế (PENDING, PAID)
     public List<Map<String, String>> getSeatsStatus(Long showtimeId) {
         clearExpiredPendingBookings();
         LocalDateTime validFrom = LocalDateTime.now().minusSeconds(HOLD_SECONDS);
@@ -41,6 +44,7 @@ public class BookingService {
                 .toList();
     }
 
+    // giữ ghế trong vòng n(s) để thanh toán
     @Transactional
     public HoldBookingResponse holdSeats(HoldBookingRequest request) {
         clearExpiredPendingBookings();
@@ -67,7 +71,7 @@ public class BookingService {
         );
 
         if (hasLockedSeat) {
-            throw new RuntimeException("Một hoặc nhiều ghế đã được giữ hoặc đã thanh toán");
+            throw new RuntimeException("Một hoặc nhiều ghế đã được giữ hoặc đã thanh toán. Vui lòng load lại trang.");
         }
 
         BigDecimal totalAmount = showtime.getTicketPrice()
@@ -109,6 +113,7 @@ public class BookingService {
         }
     }
 
+    // thanh toán trong vong n(s)
     @Transactional
     public void payBooking(Long bookingId) {
         clearExpiredPendingBookings();
@@ -116,21 +121,11 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy booking"));
 
-        User currentUser = userService.getCurrentUser();
-
-        if (!booking.getUser().getUserId().equals(currentUser.getUserId())) {
-            throw new RuntimeException("Bạn không có quyền thanh toán booking này");
-        }
-
-        if (booking.getBookingStatus() != BookingStatus.PENDING) {
-            throw new RuntimeException("Booking không ở trạng thái chờ thanh toán");
-        }
-
         LocalDateTime expiredBefore = LocalDateTime.now().minusSeconds(HOLD_SECONDS);
 
         if (booking.getBookingDate().isBefore(expiredBefore)) {
             cancelExpiredBooking(booking);
-            throw new RuntimeException("Booking đã hết hạn giữ ghế");
+            throw new RuntimeException("Đã hết thời gian giữ ghế");
         }
 
         List<Ticket> tickets = ticketRepository.findByBookingBookingId(bookingId);
@@ -165,5 +160,13 @@ public class BookingService {
         ticketRepository.deleteAll(tickets);
 
         bookingRepository.save(booking);
+    }
+
+    public Page<Booking> getHistory(Long userId, String keyword, Pageable pageable){
+        if(keyword == null || keyword.isBlank()){
+            return bookingRepository.findAllHistory(userId,pageable);
+        }
+
+        return bookingRepository.SearchHistory(userId,keyword,pageable);
     }
 }

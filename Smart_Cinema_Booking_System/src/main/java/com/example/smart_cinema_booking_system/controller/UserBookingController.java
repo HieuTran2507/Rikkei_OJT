@@ -2,12 +2,16 @@ package com.example.smart_cinema_booking_system.controller;
 
 import com.example.smart_cinema_booking_system.model.dto.HoldBookingRequest;
 import com.example.smart_cinema_booking_system.model.dto.HoldBookingResponse;
+import com.example.smart_cinema_booking_system.model.entity.Movie;
 import com.example.smart_cinema_booking_system.model.entity.Showtime;
 import com.example.smart_cinema_booking_system.repository.BookingRepository;
 import com.example.smart_cinema_booking_system.repository.ShowtimeRepository;
 import com.example.smart_cinema_booking_system.service.BookingService;
 import com.example.smart_cinema_booking_system.service.ShowtimeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,10 +66,5 @@ public class UserBookingController {
                     .badRequest()
                     .body(e.getMessage());
         }
-    }
-
-    @GetMapping("/history")
-    public String historyPage() {
-        return "user/booking-history";
     }
 }

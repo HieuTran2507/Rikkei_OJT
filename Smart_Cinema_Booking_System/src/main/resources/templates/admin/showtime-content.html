@@ -7,7 +7,7 @@
             <input type="text"
                    id="search"
                    th:value="${keyword}"
-                   placeholder="Search..."
+                   placeholder="tìm kiếm theo tên phim hoặc tên phòng"
                    class="border px-3 py-2 rounded w-80">
 
             <button onclick="searchShowtimes()"
@@ -63,7 +63,7 @@
                     </span>
                 </td>
 
-                <td th:text="${s.ticketPrice}"></td>
+                <td th:text="${#numbers.formatDecimal(s.ticketPrice, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
 
                 <td class="space-x-2">
 
